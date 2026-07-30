@@ -1,0 +1,12 @@
+# Ignore large zip archives
+*.zip
+
+# Ignore Laravel dependencies and builds
+**/vendor/
+**/node_modules/
+**/public/storage
+**/public/hot
+**/storage/*.key
+.env
+.env.backup
+.env.production
