@@ -34,3 +34,42 @@
 form#addProductForm .dropzone {
     min-height: auto !important;
 }
+
+/* DataTables Buttons & Length Select UI Fix */
+#datatable-buttons_wrapper .row:first-child {
+    align-items: center;
+    margin-bottom: 15px;
+}
+#datatable-buttons_wrapper .dataTables_length {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-right: 15px;
+}
+#datatable-buttons_wrapper .dataTables_length label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0;
+    font-weight: 600;
+    color: #495057;
+    font-size: 13px;
+}
+#datatable-buttons_wrapper .dataTables_length select {
+    width: auto !important;
+    display: inline-block !important;
+    padding: 5px 28px 5px 12px !important;
+    border-radius: 6px !important;
+    border: 1px solid #ced4da !important;
+}
+#datatable-buttons_wrapper .dt-buttons {
+    display: inline-flex;
+    gap: 4px;
+    flex-wrap: wrap;
+}
+#datatable-buttons_wrapper .dt-buttons .btn {
+    border-radius: 6px !important;
+    font-weight: 600;
+    font-size: 13px;
+    padding: 5px 12px;
+}

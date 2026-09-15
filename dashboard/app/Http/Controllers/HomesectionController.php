@@ -42,31 +42,42 @@ class HomesectionController extends Controller
         }
     }
 
-    public function addproductupdate(Request $request)
-{
-
-
-    $section_id = $request->section_id;
-    $product_ids = $request->product_id;
-
-    // Optional: clear old entries first if needed
-    DB::table('section_products')->where('section_id', $section_id)->delete();
-
-    // Insert new entries
-    foreach ($product_ids as $product_id) {
-        DB::table('section_products')->insert([
-            'section_id' => $section_id,
-            'product_id' => $product_id,
-            'created_at' => now(),
-            'updated_at' => now(),
+    public function getsectionproducts($id)
+    {
+        $product_ids = SectionProducts::where('section_id', $id)->pluck('product_id')->toArray();
+        return response()->json([
+            'status' => 200,
+            'product_ids' => $product_ids
         ]);
     }
 
-      return response()->json([
-                'status' => '200',
-                'message' => 'Home product Added Successfully'
-            ]);
-}
+    public function addproductupdate(Request $request)
+    {
+        $section_id = $request->section_id;
+        $product_ids = $request->product_id ?? [];
+
+        // Clear old entries first
+        DB::table('section_products')->where('section_id', $section_id)->delete();
+
+        // Insert new entries if selected
+        if (!empty($product_ids)) {
+            $data = [];
+            foreach ($product_ids as $product_id) {
+                $data[] = [
+                    'section_id' => $section_id,
+                    'product_id' => $product_id,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ];
+            }
+            DB::table('section_products')->insert($data);
+        }
+
+        return response()->json([
+            'status' => '200',
+            'message' => 'Home product Added Successfully'
+        ]);
+    }
 
 
 public function updatesectionheading(Request $request)

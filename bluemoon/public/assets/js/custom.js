@@ -92,7 +92,11 @@
       slidesPerView : 1,
       slidesPerGroup: 1,
       loop: true,
-      speed: 500,
+      speed: 800,
+      autoplay: {
+        delay: 5000,
+        disableOnInteraction: false,
+      },
       spaceBetween: 0,
       effect: 'fade',
       autoHeight: true, //enable auto height
@@ -120,13 +124,16 @@
       }
     });
 
-  // Product Slider Col4 Js
+  // Product Slider Col4 Js (Updated to 5 items on Desktop)
     var productSliderCol4 = new Swiper('.product-slider-col4-container', {
-      slidesPerView : 4,
+      slidesPerView : 5,
       slidesPerGroup: 1,
       allowTouchMove: true,
-      autoplay:true,
-      spaceBetween: 30,
+      autoplay: {
+        delay: 5000,
+        disableOnInteraction: false,
+      },
+      spaceBetween: 20,
       speed: 600,
       navigation: {
         nextEl: '.product-swiper-btn-next',
@@ -134,20 +141,28 @@
       },
       breakpoints: {
         1400: {
-          slidesPerView : 4,
-          spaceBetween: 30,
+          slidesPerView : 5,
+          spaceBetween: 20,
         },
         1200: {
-          slidesPerView : 4,
-          spaceBetween: 30,
+          slidesPerView : 5,
+          spaceBetween: 20,
           allowTouchMove: true,
           autoplay: {
             delay: 5000,
           },
         },
         992: {
+          slidesPerView : 4,
+          spaceBetween: 20,
+          allowTouchMove: true,
+          autoplay: {
+            delay: 5000,
+          },
+        },
+        768: {
           slidesPerView : 3,
-          spaceBetween: 30,
+          spaceBetween: 20,
           allowTouchMove: true,
           autoplay: {
             delay: 5000,
@@ -155,15 +170,15 @@
         },
         576: {
           slidesPerView : 2,
-          spaceBetween: 30,
+          spaceBetween: 20,
           allowTouchMove: true,
           autoplay: {
             delay: 5000,
           },
         },
         0: {
-          slidesPerView : 1,
-          spaceBetween: 30,
+          slidesPerView : 2,
+          spaceBetween: 10,
           allowTouchMove: true,
           autoplay: {
             delay: 5000,
@@ -212,13 +227,13 @@
       allowTouchMove: true,
     },
     576: {
-      slidesPerView: 2,
-      spaceBetween: 30,
+      slidesPerView: 4,
+      spaceBetween: 20,
       allowTouchMove: true,
     },
     0: {
-      slidesPerView: 1,
-      spaceBetween: 30,
+      slidesPerView: 3,
+      spaceBetween: 12,
       allowTouchMove: true,
     },
   }
@@ -230,7 +245,7 @@
     var testimonialSlider = new Swiper('.testimonial-slider-container', {
       slidesPerView : 2,
       slidesPerGroup: 1,
-      allowTouchMove: false,
+      allowTouchMove: true,
       spaceBetween: 30,
       autoplay:true,
       speed: 600,
@@ -245,7 +260,7 @@
         },
         0: {
           slidesPerView : 1,
-          spaceBetween: 30,
+          spaceBetween: 20,
           allowTouchMove: true,
         },
       }

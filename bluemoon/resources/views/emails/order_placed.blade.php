@@ -66,14 +66,14 @@ $tot = 0;
             {{ $customer->address }}<br>
             {{ $customer->state }}, {{ $customer->city }}, {{ $customer->pincode }}
         </td>
-        <td>
+        <!-- <td>
             <strong>Bank Details</strong><br>
             A/C Name: Prakash<br>
             A/C Number: 922020057877047<br>
             A/C Type: Current<br>
             Bank: Axis Bank<br>
             IFSC: UTIB0000089
-        </td>
+        </td> -->
     </tr>
 </table>
 

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Blog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 class BlogController extends Controller
 {
@@ -22,8 +23,7 @@ class BlogController extends Controller
             $meta_des = $request->meta_des;
             $meta_key = $request->meta_key;
             $name = $request->name;
-            $url1 = $request->name;
-            $url =str_replace(' ', '', trim($url1));
+            $url = Str::slug($request->name);
             $feet_content = $request->feet_content;
             if ($request->hasFile('seo_image')) {
                 $image = $request->file('seo_image');
@@ -66,7 +66,7 @@ class BlogController extends Controller
         $blogs->meta_key = $request->meta_key;
         $blogs->title = $request->name;
         $blogs->feet_content = $request->feet_content;
-        $blogs->url = preg_replace('/[^A-Za-z0-9\-]/', '-', $request->name);
+        $blogs->url = Str::slug($request->name);
         if ($request->hasFile('seo_image')) {
             $image = $request->file('seo_image');
             $imageName = time() . '_' . $image->getClientOriginalName();

@@ -21,6 +21,7 @@
                             <tr>
                                 <th>S.NO</th>
                                 <th>Data Id</th>
+                                <th>Sort Order</th>
                                 <th>Name</th>
                                 <!--<th>image</th>-->
 
@@ -37,12 +38,13 @@
                               <tr>
                                 <td>{{ $i++ }}</td>
                                 <td>{{ $cat->id }}</td>
+                                <td><span class="badge bg-soft-primary text-primary fw-bold" style="font-size: 13px;">{{ $cat->sort_order ?? '-' }}</span></td>
                                  <td>{{ $cat->category_name }}</td>
                                <!--<td><img src="/{{ $cat->category_image }}" style="width: 50px"></td>-->
 
 
 
-                                <td><button type="button" class="btn btn-success waves-effect waves-light editcatgory" data-bs-toggle="modal" data-bs-target="#staticBackdrop1" data-id="{{ $cat->id }}" data-image="{{ $cat->category_image }}" data-name="{{ $cat->category_name }}">
+                                <td><button type="button" class="btn btn-success waves-effect waves-light editcatgory" data-bs-toggle="modal" data-bs-target="#staticBackdrop1" data-id="{{ $cat->id }}" data-image="{{ $cat->category_image }}" data-name="{{ $cat->category_name }}" data-order="{{ $cat->sort_order }}">
                                         <i class="bx bx-link-external font-size-16 align-middle me-2"></i></button>
                                         <button type="button" class="btn btn-danger waves-effect waves-light deletecat"  data-id="{{ $cat->id }}">
                                        <i class="fas fa-archive"></i></button>
@@ -80,6 +82,12 @@
                                 placeholder="Enter Category Name" required>
                         </div>
 
+                        <div class="mb-3">
+                            <label for="category_sort_order" class="form-label">Sort Order (Priority Number)</label>
+                            <input type="number" class="form-control" id="category_sort_order" name="sort_order"
+                                placeholder="e.g. 1, 2, 3..." min="1">
+                        </div>
+
 
                         {{-- <div class="mb-3">
                             <label class="form-label" for="add_category_image">Category Image* <small class="text-danger">(750 x 500 px)</small></label>
@@ -109,12 +117,18 @@
                 <div class="modal-body">
                   <form action="" id="category_update_form">
                         <div class="mb-3">
-                            <label for="category_add_input" class="form-label">Category Name</label>
+                            <label for="categoryname" class="form-label">Category Name</label>
                             <input type="text" class="form-control" id="categoryname" name="category_name"
                                 placeholder="Enter Category Name">
 
                                    <input type="hidden" class="form-control" id="categoryId" name="categoryId"
                                 placeholder="Enter CategoryId" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="edit_sort_order" class="form-label">Sort Order (Priority Number)</label>
+                            <input type="number" class="form-control" id="edit_sort_order" name="sort_order"
+                                placeholder="e.g. 1, 2, 3..." min="1">
                         </div>
 
 
@@ -140,10 +154,11 @@
 
  @section('scripts')
     <script>
-        $('.editcatgory').on('click', function(){
+        $(document).on('click', '.editcatgory', function(){
 
             $('#categoryId').val($(this).attr('data-id'));
             $('#categoryname').val($(this).attr('data-name'));
+            $('#edit_sort_order').val($(this).attr('data-order'));
              const imagePath = $(this).attr("data-image");
               $("#catimage").attr("src", `/${imagePath}`);
 

@@ -135,24 +135,23 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Status</h1>
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Update Order Status</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form action="" id="updatestatus">
+                <form action="/status/update" method="POST" id="updatestatus">
+                    @csrf
                     <div class="modal-body">
                         <div class="mb-3">
-                            <label for="formFile" class="form-label">Status</label>
-                            <select class="form-select" aria-label="Default select example" id="add_stock_prod" name="status">
-                                <option selected>Choose Order Status</option>
+                            <label for="add_stock_prod" class="form-label">Status</label>
+                            <select class="form-select" id="add_stock_prod" name="status" required>
+                                <option value="">Choose Order Status</option>
                                 @foreach ($status as $stat)
                                     <option value="{{ $stat->order_status }}">{{ $stat->order_status }}</option>
                                 @endforeach
                             </select>
                         </div>
 
-
-
-                        <input type="hidden" name="id"  id="add_status_id">
+                        <input type="hidden" name="id" id="add_status_id">
                     </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-primary" id="add_stock_submit_btn">Save Changes</button>
@@ -721,6 +720,72 @@ $(document).ready(function () {
         $('#endDateFilter').val('');
         table.column(6).search('').draw();
         table.column(5).search('').draw();
+    });
+
+    // Handle Status Modal Open & ID Assignment
+    $(document).on('click', '.addstatusorder', function() {
+        var orderId = $(this).data('id');
+        $('#add_status_id').val(orderId);
+    });
+
+    // Instant AJAX Order Status Update (No Page Reload)
+    $('#updatestatus').on('submit', function(e) {
+        e.preventDefault();
+        var form = $(this);
+        var orderId = $('#add_status_id').val();
+        var newStatus = $('#add_stock_prod').val();
+        var submitBtn = $('#add_stock_submit_btn');
+
+        if (!newStatus) {
+            Swal.fire('Warning', 'Please choose a status.', 'warning');
+            return;
+        }
+
+        submitBtn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin me-1"></i> Saving...');
+
+        $.ajax({
+            url: '/status/update',
+            type: 'POST',
+            data: {
+                _token: $('meta[name="csrf-token"]').attr('content'),
+                id: orderId,
+                status: newStatus
+            },
+            success: function(response) {
+                submitBtn.prop('disabled', false).html('Save Changes');
+                $('#staticBackdrop1').modal('hide');
+
+                if (response.status == 200) {
+                    // Update table row inline instantly without reload!
+                    var targetRow = $('.addstatusorder[data-id="' + orderId + '"]').closest('tr');
+                    targetRow.find('td:nth-child(7)').html(newStatus);
+
+                    // Redraw DataTable cache to keep search/filter updated
+                    var dataTable = $('#datatable-buttons').DataTable();
+                    var cell = dataTable.cell(targetRow.find('td:nth-child(7)'));
+                    cell.data(newStatus).draw(false);
+
+                    const Toast = Swal.mixin({
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 2000,
+                        timerProgressBar: true
+                    });
+
+                    Toast.fire({
+                        icon: 'success',
+                        title: response.message || 'Status updated successfully!'
+                    });
+                } else {
+                    Swal.fire('Error', response.message || 'Failed to update status.', 'error');
+                }
+            },
+            error: function() {
+                submitBtn.prop('disabled', false).html('Save Changes');
+                Swal.fire('Error', 'Something went wrong while updating status.', 'error');
+            }
+        });
     });
 
     // Trigger redraw on date change too

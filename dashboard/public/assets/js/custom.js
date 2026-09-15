@@ -299,6 +299,17 @@ $(document).on("submit", "#category_add_form", function (event) {
         success: function (response) {
             $(".preloader").fadeOut();
             console.log(response);
+            if (response.status == 400) {
+                Swal.fire({
+                    title: "Sort Order Conflict!",
+                    text: response.message,
+                    icon: "warning",
+                    customClass: {
+                        popup: "swal-custom-popup",
+                    },
+                });
+                return;
+            }
             if (response.status == 200) {
                 Swal.fire({
                     title: "Success",
@@ -330,10 +341,40 @@ $(document).on("submit", "#category_add_form", function (event) {
                     title: response.message,
                 });
 
-                // Redirect after success
+                // Append new category row instantly without reload!
+                if (response.data) {
+                    var newCat = response.data;
+                    var rowCount = $('#datatable-buttons tbody tr').length + 1;
+                    var newRowHtml = `<tr>
+                        <td>${rowCount}</td>
+                        <td>${newCat.id}</td>
+                        <td><span class="badge bg-soft-primary text-primary fw-bold" style="font-size: 13px;">${newCat.sort_order || '-'}</span></td>
+                        <td>${newCat.category_name}</td>
+                        <td>
+                            <button type="button" class="btn btn-success waves-effect waves-light editcatgory" data-bs-toggle="modal" data-bs-target="#staticBackdrop1" data-id="${newCat.id}" data-image="${newCat.category_image || ''}" data-name="${newCat.category_name}" data-order="${newCat.sort_order || ''}">
+                                <i class="bx bx-link-external font-size-16 align-middle me-2"></i>
+                            </button>
+                            <button type="button" class="btn btn-danger waves-effect waves-light deletecat" data-id="${newCat.id}">
+                                <i class="fas fa-archive"></i>
+                            </button>
+                        </td>
+                    </tr>`;
+
+                    if ($.fn.DataTable.isDataTable('#datatable-buttons')) {
+                        var dataTable = $('#datatable-buttons').DataTable();
+                        dataTable.row.add($(newRowHtml)).draw(false);
+                    } else {
+                        $('#datatable-buttons tbody').append(newRowHtml);
+                    }
+                }
+
+                $('#category_add_form')[0].reset();
+                $('#addcategoryModal').modal('hide');
+
+                // Reload page after 500ms so new category with its sort order is properly bound
                 setTimeout(function () {
                     window.location.reload();
-                }, 1500);
+                }, 500);
             } else {
                 Swal.fire({
                     title: "Error",
@@ -563,10 +604,28 @@ $(document).on("submit", "#addproduct_update_form", function (event) {
                     title: response.message,
                 });
 
-                // Redirect after success
-                setTimeout(function () {
-                    window.location.reload();
-                }, 1500);
+                // Update product row inline instantly without reload!
+                var proId = formData.get('product_id');
+                if (proId) {
+                    var targetBtn = $('.editproduct[data-id="' + proId + '"]');
+                    var targetRow = targetBtn.closest('tr');
+                    var newName = formData.get('product_name');
+                    var newMrp = formData.get('product_mrp_price');
+                    var newReg = formData.get('product_regular_price');
+                    var newContent = formData.get('product_content');
+
+                    if (newName) targetRow.find('td:nth-child(3)').html(newName);
+                    if (newMrp) targetRow.find('td:nth-child(5)').html(newMrp);
+                    if (newReg) targetRow.find('td:nth-child(6)').html(newReg);
+                    if (newContent) targetRow.find('td:nth-child(7)').html(newContent);
+
+                    if ($.fn.DataTable.isDataTable('#datatable-buttons')) {
+                        var dataTable = $('#datatable-buttons').DataTable();
+                        dataTable.row(targetRow).invalidate().draw(false);
+                    }
+                }
+
+                $('#editproductBackdrop1').modal('hide');
             } else {
                 Swal.fire({
                     title: "Error",
@@ -1160,6 +1219,17 @@ $(document).on("submit", "#category_update_form", function (event) {
         success: function (response) {
             $(".preloader").fadeOut();
             console.log(response);
+            if (response.status == 400) {
+                Swal.fire({
+                    title: "Sort Order Conflict!",
+                    text: response.message,
+                    icon: "warning",
+                    customClass: {
+                        popup: "swal-custom-popup",
+                    },
+                });
+                return;
+            }
             if (response.status == 200) {
                 Swal.fire({
                     title: "Success",
@@ -1191,10 +1261,59 @@ $(document).on("submit", "#category_update_form", function (event) {
                     title: response.message,
                 });
 
-                // Redirect after success
-                setTimeout(function () {
-                    window.location.reload();
-                }, 1500);
+                // Update Category row in DataTables instantly without page reload!
+                if ($.fn.DataTable.isDataTable('#datatable-buttons')) {
+                    var dataTable = $('#datatable-buttons').DataTable();
+
+                    if (response.updated) {
+                        var u = response.updated;
+                        var uBtn = $('.editcatgory[data-id="' + u.id + '"]');
+                        if (uBtn.length) {
+                            uBtn.attr('data-name', u.name);
+                            uBtn.attr('data-order', u.sort_order);
+                            var uRow = uBtn.closest('tr');
+                            var badgeHtml = '<span class="badge bg-soft-primary text-primary fw-bold" style="font-size: 13px;">' + u.sort_order + '</span>';
+                            dataTable.cell(uRow.find('td:nth-child(3)')).data(badgeHtml);
+                            dataTable.cell(uRow.find('td:nth-child(4)')).data(u.name);
+                        }
+                    }
+
+                    if (response.swapped) {
+                        var s = response.swapped;
+                        var sBtn = $('.editcatgory[data-id="' + s.id + '"]');
+                        if (sBtn.length) {
+                            sBtn.attr('data-order', s.sort_order);
+                            var sRow = sBtn.closest('tr');
+                            var swappedBadgeHtml = '<span class="badge bg-soft-primary text-primary fw-bold" style="font-size: 13px;">' + s.sort_order + '</span>';
+                            dataTable.cell(sRow.find('td:nth-child(3)')).data(swappedBadgeHtml);
+                        }
+                    }
+
+                    dataTable.rows().invalidate().draw(false);
+                } else {
+                    if (response.updated) {
+                        var u = response.updated;
+                        var uBtn = $('.editcatgory[data-id="' + u.id + '"]');
+                        if (uBtn.length) {
+                            uBtn.attr('data-name', u.name);
+                            uBtn.attr('data-order', u.sort_order);
+                            var uRow = uBtn.closest('tr');
+                            uRow.find('td:nth-child(3)').html('<span class="badge bg-soft-primary text-primary fw-bold" style="font-size: 13px;">' + u.sort_order + '</span>');
+                            uRow.find('td:nth-child(4)').html(u.name);
+                        }
+                    }
+                    if (response.swapped) {
+                        var s = response.swapped;
+                        var sBtn = $('.editcatgory[data-id="' + s.id + '"]');
+                        if (sBtn.length) {
+                            sBtn.attr('data-order', s.sort_order);
+                            var sRow = sBtn.closest('tr');
+                            sRow.find('td:nth-child(3)').html('<span class="badge bg-soft-primary text-primary fw-bold" style="font-size: 13px;">' + s.sort_order + '</span>');
+                        }
+                    }
+                }
+
+                $('#staticBackdrop1').modal('hide');
             } else {
                 Swal.fire({
                     title: "Error",
@@ -2055,10 +2174,14 @@ $(document).on("click", ".deletecat", function () {
                             title: response.message,
                         });
 
-                        // Redirect after success
-                        setTimeout(function () {
-                            window.location.reload();
-                        }, 1500);
+                        // Remove row from DataTables instantly without reload!
+                        var targetRow = $('.deletecat[data-id="' + id + '"]').closest('tr');
+                        if ($.fn.DataTable.isDataTable('#datatable-buttons')) {
+                            var dataTable = $('#datatable-buttons').DataTable();
+                            dataTable.row(targetRow).remove().draw(false);
+                        } else {
+                            targetRow.remove();
+                        }
                     } else {
                         Swal.fire({
                             title: "Error",
@@ -2299,10 +2422,14 @@ $(document).on("click", ".deleteproduct", function () {
                             title: response.message,
                         });
 
-                        // Redirect after success
-                        setTimeout(function () {
-                            window.location.reload();
-                        }, 1500);
+                        // Remove row from DataTables instantly without reload!
+                        var targetRow = $('.deleteproduct[data-id="' + id + '"]').closest('tr');
+                        if ($.fn.DataTable.isDataTable('#datatable-buttons')) {
+                            var dataTable = $('#datatable-buttons').DataTable();
+                            dataTable.row(targetRow).remove().draw(false);
+                        } else {
+                            targetRow.remove();
+                        }
                     } else {
                         Swal.fire({
                             title: "Error",
@@ -3506,10 +3633,24 @@ $(document).on("submit", "#updatestatus", function (event) {
                     title: response.message,
                 });
 
-                // Redirect after success
-                setTimeout(function () {
-                    window.location.reload();
-                }, 1500);
+                // Update table row inline instantly without reload!
+                var orderId = formData.get('id');
+                var newStatus = formData.get('status');
+
+                if (orderId && newStatus) {
+                    var targetRow = $('.addstatusorder[data-id="' + orderId + '"]').closest('tr');
+                    if (targetRow.length) {
+                        targetRow.find('td:nth-child(7)').html(newStatus);
+                        if ($.fn.DataTable.isDataTable('#datatable-buttons')) {
+                            var dataTable = $('#datatable-buttons').DataTable();
+                            var cell = dataTable.cell(targetRow.find('td:nth-child(7)'));
+                            cell.data(newStatus).draw(false);
+                        }
+                    }
+                }
+
+                // Close modal
+                $('#staticBackdrop1').modal('hide');
             } else {
                 Swal.fire({
                     title: "Error",

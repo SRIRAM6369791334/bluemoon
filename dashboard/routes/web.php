@@ -97,6 +97,7 @@ Route::middleware(['auth'])->group(function () {
 
     // home sections
     Route::GET('/homesection/view',[HomesectionController::class, 'index']);
+    Route::GET('/getsectionproducts/{id}',[HomesectionController::class, 'getsectionproducts']);
     Route::POST('/sectionhead/add',[HomesectionController::class, 'addsectionhead']);
     Route::POST('/addproduct/update',[HomesectionController::class, 'addproductupdate']);
     Route::POST('/sectionheading/update',[HomesectionController::class,'updatesectionheading']);
@@ -112,6 +113,7 @@ Route::middleware(['auth'])->group(function () {
 
     // Customer
     Route::resource('/customer',CustmerController::class);
+    Route::POST('/customer/update', [CustmerController::class, 'updateCustomer'])->name('customer.update');
     Route::GET('/customer/data', [CustmerController::class, 'getCustomer'])->name('customers.data');
     Route::resource('/vendor/ordersstatus', OrderStatusController::class);
 

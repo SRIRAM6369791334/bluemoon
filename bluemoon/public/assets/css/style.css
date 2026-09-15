@@ -225,7 +225,7 @@ table p {
 
 @media only screen and (min-width: 1200px) {
   .container {
-    max-width: 1200px;
+    /* max-width: 1200px; */
   }
 }
 
@@ -3706,17 +3706,62 @@ table p {
   }
 }
 
+/* Automatic Equal Height Product Cards & Bottom Aligned Buttons */
+.product-slider-wrap .swiper-wrapper {
+  display: flex !important;
+  align-items: stretch !important;
+}
+
+.product-slider-wrap .swiper-slide {
+  height: auto !important;
+  display: flex !important;
+}
+
 .product-item {
-  margin-bottom: 36px;
+  width: 100%;
+  display: flex !important;
+  flex-direction: column !important;
+  height: 100% !important;
+  margin-bottom: 0 !important;
+}
+
+.product-item .inner-content {
+  display: flex !important;
+  flex-direction: column !important;
+  height: 100% !important;
+  justify-content: space-between !important;
+  width: 100%;
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 14px !important;
+  padding: 12px !important;
+  box-shadow: 0 4px 15px rgba(45, 53, 107, 0.05) !important;
+  transition: all 0.3s ease !important;
+}
+
+.product-item .inner-content:hover {
+  border-color: rgba(45, 53, 107, 0.25) !important;
+  box-shadow: 0 8px 24px rgba(45, 53, 107, 0.1) !important;
+}
+
+.product-item .inner-content .product-info {
+  flex-grow: 1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+}
+
+.product-item .inner-content .button {
+  margin-top: auto !important;
 }
 
 .product-item .inner-content .product-thumb {
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
-  border: 2px solid #e1e1e1;
-  background-color: #fff;
-  border-radius: 13px;
+  border: 1px solid #e2e8f0;
+  background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%) !important;
+  border-radius: 10px;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -3726,43 +3771,97 @@ table p {
   overflow: hidden;
   position: relative;
   z-index: 1;
+  height: 220px;
+  width: 100%;
+  padding: 12px;
+}
+
+.product-item .inner-content .product-thumb a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
 }
 
 .product-item .inner-content .product-thumb img {
-  border-radius: 13px;
+  border-radius: 8px;
   transition: all 0.4s ease-out;
   -webkit-transition: all 0.4s ease-out;
   -moz-transition: all 0.4s ease-out;
   -ms-transition: all 0.4s ease-out;
   -o-transition: all 0.4s ease-out;
-  width: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  object-position: center;
+}
+
+/* Perfect Offer Badge - 100% Visible Text, No Clipping, Original V-Ribbon Shape */
+.product-item .inner-content .product-thumb .product-flag::after,
+.product-item .inner-content .product-thumb .product-flag::before {
+  display: none !important;
+  content: none !important;
 }
 
 .product-item .inner-content .product-thumb .product-flag {
-  left: 18px;
-  line-height: 1;
-  position: absolute;
-  top: 18px;
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  z-index: 10 !important;
+  line-height: 1 !important;
+  pointer-events: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
 }
 
 .product-item .inner-content .product-thumb .product-flag ul {
-  margin-bottom: 0;
+  margin: 0 !important;
+  padding: 0 !important;
+  list-style: none !important;
 }
 
-.product-item .inner-content .product-thumb .product-flag ul>li {
-    background-color: #2cb671;
-    border-radius: 1px;
-    color: #fff;
-    font-size: 14px;
-    font-weight: 600;
-    line-height: 24px;
-    display: inline-block;
-    height: 45px;
-    padding: 0px 10.42px;
-    text-align: center;
-    position: relative;
-    left: -18px;
-    bottom: 18px;
+.product-item .inner-content .product-thumb .product-flag ul > li {
+  background-color: #2cb671 !important;
+  color: #ffffff !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 6px 10px 14px 10px !important;
+  min-width: 46px !important;
+  width: auto !important;
+  height: auto !important;
+  text-align: center !important;
+  position: relative !important;
+  left: 0 !important;
+  top: 0 !important;
+  bottom: auto !important;
+  right: auto !important;
+  margin: 0 !important;
+  border-top-left-radius: 11px !important;
+  clip-path: polygon(0 0, 100% 0, 100% 85%, 50% 100%, 0 85%) !important;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15) !important;
+}
+
+.product-item .inner-content .product-thumb .product-flag ul > li,
+.product-item .inner-content .product-thumb .product-flag ul > li * {
+  color: #ffffff !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  line-height: 1.2 !important;
+  white-space: nowrap !important;
+}
+
+.product-item .inner-content .product-thumb .product-flag ul > li p {
+  margin: 0 !important;
+  padding: 0 !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  color: #ffffff !important;
+  line-height: 1 !important;
 }
 
 
@@ -4584,96 +4683,81 @@ table p {
   position: relative;
 }
 
-@media only screen and (max-width: 1399.98px) {
-  .product-slider-wrap .product-swiper-btn-wrap {
-    display: none;
-  }
+/* 2. Section Title Accent, Line Divider & Solid Button Styling (Matching Image 2) */
+.section-title {
+  display: flex !important;
+  align-items: center !important;
+  position: relative !important;
+  width: 100% !important;
+  margin-bottom: 24px !important;
+}
+
+.section-title .title {
+  color: #2d356b !important;
+  font-weight: 800 !important;
+  position: relative !important;
+  margin-bottom: 0 !important;
+  padding-right: 15px !important;
+  white-space: nowrap !important;
+  text-shadow: 2px 3px 6px rgba(0, 0, 0, 0.12) !important;
+  z-index: 2;
+}
+
+.section-title::after {
+  content: "" !important;
+  flex-grow: 1 !important;
+  height: 24px !important;
+  background-image: url('/assets/img/decorative_divider.svg') !important;
+  background-repeat: no-repeat !important;
+  background-position: center center !important;
+  background-size: 100% 24px !important;
+  margin-left: 15px !important;
+  margin-right: 85px !important;
+}
+
+/* Reference-style Swiper Navigation Buttons Positioning & Styling */
+.product-slider-wrap {
+  position: relative;
+}
+
+.product-slider-wrap .product-swiper-btn-wrap {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  position: absolute !important;
+  top: -72px !important;
+  right: 0 !important;
+  z-index: 5 !important;
 }
 
 .product-slider-wrap .product-swiper-btn-wrap .product-swiper-btn-prev,
 .product-slider-wrap .product-swiper-btn-wrap .product-swiper-btn-next {
-  background-color: #fff;
-  border: 1px solid #efbe6f;
-  border-radius: 50%;
-  color: #efbe6f;
-  font-size: 18px;
-  height: 50px;
-  line-height: 48px;
-  position: absolute;
-  text-align: center;
-  top: 112px;
-  width: 50px;
-  transition: all 0.3s ease-out;
-  -webkit-transition: all 0.3s ease-out;
-  -moz-transition: all 0.3s ease-out;
-  -ms-transition: all 0.3s ease-out;
-  -o-transition: all 0.3s ease-out;
-  z-index: 1;
-}
-
-@media (max-width: 1559px) {
-
-  .product-slider-wrap .product-swiper-btn-wrap .product-swiper-btn-prev,
-  .product-slider-wrap .product-swiper-btn-wrap .product-swiper-btn-next {
-    border-radius: 4px;
-    font-size: 12px;
-    height: 30px;
-    line-height: 28px;
-    width: 30px;
-  }
-}
-
-@media only screen and (max-width: 1399.98px) {
-
-  .product-slider-wrap .product-swiper-btn-wrap .product-swiper-btn-prev,
-  .product-slider-wrap .product-swiper-btn-wrap .product-swiper-btn-next {
-    position: relative;
-    top: auto;
-  }
+  position: relative !important;
+  top: 0 !important;
+  left: auto !important;
+  right: auto !important;
+  margin: 0 !important;
+  width: 32px !important;
+  height: 32px !important;
+  line-height: 30px !important;
+  background-color: #e25d26 !important;
+  border: none !important;
+  border-radius: 4px !important;
+  color: #ffffff !important;
+  font-size: 13px !important;
+  text-align: center !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease-in-out !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-shadow: 0 2px 5px rgba(226, 93, 38, 0.3) !important;
 }
 
 .product-slider-wrap .product-swiper-btn-wrap .product-swiper-btn-prev:hover,
 .product-slider-wrap .product-swiper-btn-wrap .product-swiper-btn-next:hover {
-  background-color: #efbe6f;
-  color: #fff;
-}
-
-.product-slider-wrap .product-swiper-btn-wrap .product-swiper-btn-prev {
-  left: -110px;
-}
-
-@media (max-width: 1559px) {
-  .product-slider-wrap .product-swiper-btn-wrap .product-swiper-btn-prev {
-    left: 100%;
-    position: relative;
-    top: -425px;
-  }
-}
-
-@media only screen and (max-width: 1399.98px) {
-  .product-slider-wrap .product-swiper-btn-wrap .product-swiper-btn-prev {
-    left: auto;
-  }
-}
-
-.product-slider-wrap .product-swiper-btn-wrap .product-swiper-btn-next {
-  right: -110px;
-}
-
-@media (max-width: 1559px) {
-  .product-slider-wrap .product-swiper-btn-wrap .product-swiper-btn-next {
-           left: 103%;
-       top: -455px;
-        position: relative;
-  }
-}
-
-@media only screen and (max-width: 1399.98px) {
-  .product-slider-wrap .product-swiper-btn-wrap .product-swiper-btn-next {
-    right: auto;
-    left: 0;
-    margin-left: 10px;
-  }
+  background-color: #c0392b !important;
+  color: #ffffff !important;
 }
 
 @media only screen and (max-width: 1199px) {
@@ -10596,7 +10680,7 @@ table p {
   -webkit-box-shadow: -4px 0px 20px 0px rgba(0, 0, 0, 0.1);
   box-shadow: -4px 0px 20px 0px rgba(0, 0, 0, 0.1);
   margin-bottom: 30px;
-  padding: 40px 30px 32px;
+  padding: 0px 30px 32px;
   text-align: center;
   height: 279px;
 }
@@ -11337,6 +11421,126 @@ table p {
             /* font-size: 16px; */
             margin-top: 15px;
         }
+
+/* ==========================================================================
+   ULTRA-PREMIUM AGENCY-GRADE UI ENHANCEMENTS
+   ========================================================================== */
+
+/* 1. Feature Grid Trust Cards */
+.cat-product-section .card {
+  border: 1px solid rgba(45, 53, 107, 0.12) !important;
+  border-radius: 12px !important;
+  background: #f8fafc !important;
+  transition: all 0.3s ease !important;
+  box-shadow: 0 4px 15px rgba(45, 53, 107, 0.05) !important;
+}
+
+.cat-product-section .card:hover {
+  transform: translateY(-4px) !important;
+  border-color: #2d356b !important;
+  box-shadow: 0 10px 25px rgba(45, 53, 107, 0.12) !important;
+}
+
+.cat-product-section .ave {
+  width: 46px;
+  height: 46px;
+  background: rgba(45, 53, 107, 0.08);
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cat-product-section .ave i {
+  font-size: 20px !important;
+  color: #2d356b !important;
+}
+
+/* 2. Section Title Accent & Shadow Styling */
+.section-title .title {
+  color: #2d356b !important;
+  font-weight: 400 !important;
+  position: relative;
+  margin-bottom: 12px !important;
+  text-shadow: 2px 3px 6px rgb(24 119 242 / 50%) !important;
+}
+
+.badge-eyebrow {
+  background: rgba(226, 93, 38, 0.1);
+  color: #e25d26;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  border-radius: 20px;
+  padding: 4px 14px;
+  text-transform: uppercase;
+}
+
+/* 3. Product Card Styling & Premium Gradient Buttons */
+.product-item {
+  border-radius: 14px;
+}
+
+.product-item:hover {
+  transform: none !important;
+}
+
+.product-item .button {
+  background: linear-gradient(135deg, #e25d26 0%, #ff7838 100%) !important;
+  border: none !important;
+  border-radius: 6px !important;
+  box-shadow: 0 4px 12px rgba(226, 93, 38, 0.3) !important;
+  transition: all 0.3s ease !important;
+}
+
+.product-item .button:hover {
+  background: linear-gradient(135deg, #d9531e 0%, #e25d26 100%) !important;
+  box-shadow: 0 6px 16px rgba(226, 93, 38, 0.45) !important;
+}
+
+.product-item .button .cart-text {
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.5px !important;
+}
+
+/* 4. Testimonial Cards Upgrade */
+.testimonial-item {
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+  transition: all 0.3s ease;
+}
+
+.testimonial-item:hover {
+  border-color: #f3b229;
+  box-shadow: 0 10px 30px rgba(45, 53, 107, 0.1);
+}
+
+/* Generous Section Spacing & Visual Rhythm */
+.product-area.product-best-seller-area {
+  padding-top: 20px !important;
+  /* padding-bottom: 45px !important; */
+  margin-bottom: 15px !important;
+}
+
+.product-area.product-best-seller-area .container {
+  padding-bottom: 0 !important;
+}
+
+.cat-product-section {
+  margin-bottom: 25px !important;
+}
+
+.section-title {
+  margin-bottom: 24px !important;
+}
+
+.product-slider-wrap {
+  margin-bottom: 10px !important;
+}
 
         .confirm-btn:hover {
             background-color: #16a1a0;

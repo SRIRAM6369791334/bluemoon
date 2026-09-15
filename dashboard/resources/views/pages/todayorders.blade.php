@@ -46,7 +46,7 @@
 
                                 <td>
                                     <!--<button class="btn btn-danger waves-effect waves-light vieworders" data-cname="{{ $order->name }}" data-address="{{ $order->address }}" data-orderid="{{ $order->oeder_id }}" data-bs-toggle="modal" data-bs-target="#vieworderdetails">View</button>-->
-                                    <a href="/pdf/{{ $order->oeder_id }}/{{ $order->user_id }}" class="btn btn-danger waves-effect waves-light">Print</a> <button type="button" class="btn btn-success waves-effect waves-light addstatus" data-bs-toggle="modal" data-bs-target="#staticBackdrop1" data-id="{{ $order->id }}">
+                                    <a href="/pdf/{{ $order->oeder_id }}/{{ $order->user_id }}" class="btn btn-danger waves-effect waves-light">Print</a> <button type="button" class="btn btn-success waves-effect waves-light addstatus addstatusorder" data-bs-toggle="modal" data-bs-target="#staticBackdrop1" data-id="{{ $order->id }}">
                                         <i class="bx bx-link-external font-size-16 align-middle me-2"></i>
                                    </td>
 

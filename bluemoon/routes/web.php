@@ -13,6 +13,9 @@ Route::get('/', function () {
     return view('pages.home1');
 });
 
+Route::get('/home', function () {
+    return view('pages.home');
+});
 
 Route::view('/about','pages.about');
 Route::view('/contact','pages.contact');
@@ -27,9 +30,9 @@ Route::view('/orderdetails','pages.orderdetails');
 Route::view('/privacy','pages.privacy');
 Route::view('/shipping','pages.shipping');
 Route::view('/terms','pages.terms');
-Route::view('/seodetails','pages.seodetails');
+Route::redirect('/seodetails', '/');
 Route::view('/blog','pages.blog');
-Route::view('/blogdetails','pages.blogdetails');
+Route::redirect('/blogdetails', '/blog');
 
 
 

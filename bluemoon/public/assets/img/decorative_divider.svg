@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 40" preserveAspectRatio="none" width="100%" height="24">
+  <!-- Left Solid Continuous 2px Line -->
+  <rect x="35" y="19" width="430" height="2.5" fill="#e25d26"/>
+  <!-- Left Diamond End -->
+  <polygon points="12,20 24,14 36,20 24,26" fill="#2d356b"/>
+
+  <!-- Center Sparkle Star Ornaments (Centered at Y=20, Zero Clipping) -->
+  <g transform="translate(500, 20)">
+    <!-- Outer Side Accent Dots -->
+    <circle cx="-35" cy="0" r="3.5" fill="#2d356b"/>
+    <circle cx="35" cy="0" r="3.5" fill="#2d356b"/>
+
+    <!-- Inner Side Diamonds -->
+    <polygon points="-22,0 -16,-5 -10,0 -16,5" fill="#e25d26"/>
+    <polygon points="10,0 16,-5 22,0 16,5" fill="#e25d26"/>
+
+    <!-- Main Center 8-Point Diamond Sparkle Star -->
+    <polygon points="0,-14 4,-4 14,0 4,4 0,14 -4,4 -14,0 -4,-4" fill="#f3b229"/>
+    <polygon points="0,-8 2,-2 8,0 2,2 0,8 -2,2 -8,0 -2,-2" fill="#e25d26"/>
+    <circle cx="0" cy="0" r="2.5" fill="#ffffff"/>
+  </g>
+
+  <!-- Right Solid Continuous 2px Line -->
+  <rect x="535" y="19" width="430" height="2.5" fill="#e25d26"/>
+  <!-- Right Diamond End -->
+  <polygon points="988,20 976,14 964,20 976,26" fill="#2d356b"/>
+</svg>

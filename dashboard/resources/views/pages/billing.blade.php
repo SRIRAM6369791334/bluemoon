@@ -720,35 +720,42 @@
 $(document).ready(function() {
     // Initialize DataTable
     var billingTable = $('#billing-table').DataTable({
-        pageLength: 15,
+        lengthChange: true,
+        lengthMenu: [[10, 20, 50, 100, -1], [10, 20, 50, 100, "All"]],
+        pageLength: 10,
         order: [[1, 'desc']],
-        dom: 'Bfrtip',
+        dom: '<"d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3"<"d-flex align-items-center gap-2"lB>f>rtip',
         buttons: [
+            {
+                extend: 'colvis',
+                text: '<i class="fas fa-columns me-1"></i> Column Visibility',
+                className: 'btn btn-sm btn-secondary'
+            },
             {
                 extend: 'excelHtml5',
                 text: '<i class="fas fa-file-excel me-1"></i> Excel',
-                className: 'btn btn-sm',
+                className: 'btn btn-sm btn-success',
                 title: 'Billing_Report_{{ date("Y-m-d") }}',
                 exportOptions: { columns: [0,1,2,3,4,5,6,7] }
             },
             {
                 extend: 'pdfHtml5',
                 text: '<i class="fas fa-file-pdf me-1"></i> PDF',
-                className: 'btn btn-sm',
+                className: 'btn btn-sm btn-danger',
                 title: 'Billing Report - {{ date("d M Y") }}',
                 exportOptions: { columns: [0,1,2,3,4,5,6,7] }
             },
             {
                 extend: 'print',
                 text: '<i class="fas fa-print me-1"></i> Print',
-                className: 'btn btn-sm',
+                className: 'btn btn-sm btn-info',
                 title: 'Billing Report',
                 exportOptions: { columns: [0,1,2,3,4,5,6,7] }
             },
             {
                 extend: 'csvHtml5',
                 text: '<i class="fas fa-file-csv me-1"></i> CSV',
-                className: 'btn btn-sm',
+                className: 'btn btn-sm btn-warning',
                 title: 'Billing_Report_{{ date("Y-m-d") }}',
                 exportOptions: { columns: [0,1,2,3,4,5,6,7] }
             }
@@ -835,36 +842,76 @@ $(document).ready(function() {
         $('#billing_status_id').val($(this).attr('data-id'));
     });
 
-    // Handle Status Update Submission
+    // Handle Status Update Submission (No Reload - Maintains Pagination!)
     $('#billingUpdateStatus').on('submit', function(e) {
         e.preventDefault();
-        var formData = $(this).serialize();
-        $('#billing_status_submit').prop('disabled', true).html('<i class="fas fa-spinner fa-spin me-1"></i> Special Saving...');
+        var form = $(this);
+        var orderId = $('#billing_status_id').val();
+        var newStatus = $('#billing_status_select').val();
+        var submitBtn = $('#billing_status_submit');
+
+        if (!newStatus) {
+            Swal.fire('Warning', 'Please choose a status.', 'warning');
+            return;
+        }
+
+        submitBtn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin me-1"></i> Saving...');
         
         $.ajax({
-            url: $(this).attr('action'),
+            url: form.attr('action'),
             method: 'POST',
-            data: formData,
+            data: {
+                _token: $('meta[name="csrf-token"]').attr('content'),
+                id: orderId,
+                status: newStatus
+            },
             success: function(response) {
+                submitBtn.prop('disabled', false).html('<i class="fas fa-save me-1"></i> Save Changes');
+                $('#billingStatusModal').modal('hide');
+
                 if (response.status == 200) {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Success!',
-                        text: response.message,
-                        timer: 1500,
-                        showConfirmButton: false
-                    }).then(() => {
-                        location.reload();
+                    var targetRow = $('.addstatusorder[data-id="' + orderId + '"]').closest('tr');
+                    
+                    // Determine status badge styling class
+                    var statusClass = 'pending';
+                    if (newStatus == 'Delivered' || newStatus == 'Paid' || newStatus == 'Complete ') statusClass = 'delivered';
+                    else if (newStatus == 'Cancelled' || newStatus == 'Rejected') statusClass = 'cancelled';
+                    else if (newStatus == 'Dispatch') statusClass = 'dispatch';
+                    else if (newStatus == 'Processing') statusClass = 'processing';
+
+                    var badgeHtml = '<span class="badge-billing ' + statusClass + '"><i class="fas fa-circle"></i> ' + newStatus + '</span>';
+
+                    // Update cell instantly in DOM and DataTables cache without page refresh!
+                    targetRow.find('td:nth-child(9)').html(badgeHtml);
+
+                    if ($.fn.DataTable.isDataTable('#billing-table')) {
+                        var cell = billingTable.cell(targetRow.find('td:nth-child(9)'));
+                        cell.data(badgeHtml).draw(false); // draw(false) preserves current pagination page!
+                    }
+
+                    const Toast = Swal.mixin({
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 2000,
+                        timerProgressBar: true
                     });
+
+                    Toast.fire({
+                        icon: 'success',
+                        title: response.message || 'Invoice status updated successfully!'
+                    });
+                } else {
+                    Swal.fire('Error', response.message || 'Failed to update status.', 'error');
                 }
             },
             error: function() {
+                submitBtn.prop('disabled', false).html('<i class="fas fa-save me-1"></i> Save Changes');
                 Swal.fire({
                     icon: 'error',
                     title: 'Oops...',
                     text: 'Something went wrong while updating status.'
                 });
-                $('#billing_status_submit').prop('disabled', false).html('<i class="fas fa-save me-1"></i> Save Changes');
             }
         });
     });

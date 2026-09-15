@@ -22,7 +22,11 @@ class CheckoutController extends Controller
 
 public function quickcheckout($id)
 {
-    $categories = Category::with('products')->get(); // eager load products
+    if (\Illuminate\Support\Facades\Schema::hasColumn('categories', 'sort_order')) {
+        $categories = Category::orderBy('sort_order', 'asc')->orderBy('id', 'asc')->with('products')->get();
+    } else {
+        $categories = Category::orderBy('id', 'asc')->with('products')->get();
+    }
     return view('pages.quickcheckout', compact('categories', 'id'));
 }
 
@@ -79,7 +83,7 @@ public function placeOrder(Request $request)
             $customer->save();
         }
 
-         $maxValue = ProductOrder::max('id');
+         $maxValue = ProductOrder::lockForUpdate()->max('id');
         $invID = ($maxValue !== null) ? $maxValue + 1 : 1;
         $invID = str_pad($invID, 5, '0', STR_PAD_LEFT);
         $orderid = "order" . $invID;
@@ -112,9 +116,13 @@ public function placeOrder(Request $request)
 
 
 
-//        if ($customer->email) {
-//     Mail::to($customer->email)->send(new OrderPlacedMail($order, $customer));
-// }
+        if ($customer->email) {
+            try {
+                Mail::to($customer->email)->send(new OrderPlacedMail($order, $customer));
+            } catch (\Exception $mailException) {
+                \Illuminate\Support\Facades\Log::error('Order mail error: ' . $mailException->getMessage());
+            }
+        }
 
         DB::commit();
 

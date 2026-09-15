@@ -1,354 +1,329 @@
 @extends('layouts.app')
-@section('title', 'Bluemoon Crackers Products')
+@section('title', 'Order Confirmation - Bluemoon Crackers')
 @section('main-content')
 
     @php
         $page = App\Models\PageOff::where('status', 1)->first();
         $user = Auth::guard('customer')->user();
-
     @endphp
 
     <style>
-        .header,
-        .footer {
+        .thankyou-wrapper {
+            background: #f8fafc;
+            padding: 50px 0 80px;
+        }
+        .thankyou-card {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 40px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 10px 30px rgba(45, 53, 107, 0.08);
             text-align: center;
+            margin-bottom: 40px;
+        }
+        .thankyou-icon-box {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+            color: #ffffff;
+            font-size: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            box-shadow: 0 6px 20px rgba(34, 197, 94, 0.3);
+        }
+        .thankyou-title {
+            color: #2d356b;
+            font-weight: 800;
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+        .thankyou-subtitle {
+            color: #475569;
+            font-size: 16px;
+            line-height: 1.6;
+            max-width: 700px;
+            margin: 0 auto 30px;
         }
 
-        .company-info {
-            text-align: center;
-            font-size: 18px;
-            margin-top: 10px;
-            margin-bottom: 20px;
+        /* Payment Details Box */
+        .payment-info-card {
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 30px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 20px rgba(45, 53, 107, 0.05);
+            height: 100%;
         }
-
-        .details-table {
-            width: 100%;
-            margin-bottom: 20px;
-        }
-
-        .details-table td {
-            padding: 5px 10px;
-            vertical-align: top;
-        }
-
-        .estimate-title {
-            text-align: center;
-            font-size: 22px;
-            font-weight: bold;
-            margin: 10px 0;
-        }
-
-        table.invoice {
-            width: 100%;
-            border-collapse: collapse;
+        .bank-logo-img {
+            height: 45px;
+            object-fit: contain;
             margin-bottom: 15px;
         }
+        .account-detail-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px dashed #e2e8f0;
+            font-size: 14.5px;
+        }
+        .account-detail-item:last-child {
+            border-bottom: none;
+        }
 
-        table.invoice th,
-        table.invoice td {
-            border: 1px solid #000;
-            padding: 8px;
+        /* Invoice Container */
+        .invoice-card {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 35px;
+            border: 1px solid #cbd5e1;
+            box-shadow: 0 6px 25px rgba(45, 53, 107, 0.07);
+        }
+        .invoice-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e25d26;
+            margin-bottom: 25px;
+        }
+        .invoice-badge {
+            background: #2d356b;
+            color: #ffffff;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        /* Table Styling */
+        .invoice-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        .invoice-table thead th {
+            background: #2d356b !important;
+            color: #ffffff !important;
+            font-size: 14px;
+            font-weight: 700;
+            padding: 12px 14px;
             text-align: center;
         }
-
-        table.invoice th {
-            background-color: #f2f2f2;
-        }
-
-        .totals {
-            width: 100%;
-            margin-top: 10px;
-            font-weight: bold;
-        }
-
-        .totals td {
-            padding: 6px 10px;
-            text-align: right;
-        }
-
-        .contact,
-        .bank-details {
-            width: 48%;
-            display: inline-block;
-            vertical-align: top;
-            font-size: 14px;
-            margin-top: 10px;
-        }
-
-        .footer {
-            margin-top: 40px;
-            font-size: 13px;
-            color: #666;
-        }
-
-        hr {
-            margin: 20px 0;
-        }
-        p{
-                margin-bottom: 0px;
-    line-height: 32px;
-        }
-
-         .invoice th,
-    .invoice td {
-        padding: 8px;
-        text-align: center;
-        border: 1px solid #ccc;
-        white-space: nowrap;
-    }
-
-    .invoice thead {
-        background-color: #f8f8f8;
-    }
-
-    @media (max-width: 768px) {
-        .invoice {
+        .invoice-table tbody td {
+            padding: 12px 14px;
+            border-bottom: 1px solid #e2e8f0;
+            text-align: center;
+            color: #334155;
             font-size: 14px;
         }
-    }
+        .invoice-table tfoot td {
+            padding: 10px 14px;
+            font-weight: 700;
+            font-size: 15px;
+        }
     </style>
 
-
-
-    <section class="product-area product-category-area">
-        <div class="container">
-            <div class="row mt-5 mb-5">
-
-                <div class="col-lg-12 text-center">
-                    <h1 style="color: #7462e3;">THANK YOU!</h1>
-                    <p>for choosing Bluemoon Crackers
-                    </p>
-                    <p>Thank You! Your enquiry has been received Please make the payment of #bill amount using the below QR
-                        code or any one of the Bank Aaccount given below. Once payment is done kindly inform us through
-                        phone call or whatsapp at 9087873737, 9087980098 Please note that your order will not dispatch until
-                        make the full payment.
-                        🥳</p>
-                </div>
-
-                <div class="col-lg-12 text-center pt-5">
-                    <img src="/assets/img/payment.png"
-                        style="border-radius: 100px; width:34%">
-                </div>
-                <div class="col-lg-12 text-center pt-5">
-                    <img src="/assets/img/qrcode.webp"
-                        style="border-radius: 10px; width:30%">
-                </div>
-                <div class="col-lg-6 col-sm-12 text-center pt-5" style="text-align:left">
-                    <img src="/assets/img/axis.jpg" style="border-radius: 10px;width:30%">
-                    <p>Account Number (Current Account)</p>
-                    <p style="font-weight: bold">922020057877047</p>
-                    <p>Account Name :<span style="font-weight: bold">PRAKASH</span> </p>
-                    <p>IFSC Code:<span style="font-weight: bold">UTIB0000089</span> </p>
-                    <p>Branch Name:<span style="font-weight: bold">Sivakasi Branch</span> </p>
-
-                </div>
-                <div class="col-lg-6 col-sm-12 text-center pt-5" style="text-align:left">
-                    <img src="/assets/img/indianbank.png" style="border-radius: 10px;width:30%">
-                    <p>Account Number (Current Account)</p>
-                    <p style="font-weight: bold">50392558001</p>
-                    <p>Account Name :<span style="font-weight: bold">KRISHNA TRADERS</span> </p>
-                    <p>IFSC Code: <span style="font-weight: bold"> IDIBOOOS733</span></p>
-                    <p>Branch Name:<span style="font-weight: bold">Sivakasi Branch</span></p>
-
-                </div>
-
-                <div class="col-lg-12 " style="border: 1px solid;margin-top:20px">
-
-                     @php
-                         $estimate = App\Models\ProductOrder::where('user_id', $user->id)->orderBy('oeder_id', 'desc')->first();
-
-                    @endphp
-
-                    <div class="row">
-                        <div class="col-lg-4 co-md-4 col-sm-12 text-center mt-2">
-                            <strong >Order No:</strong> {{ $estimate->oeder_id }}
-                        </div>
-                         <div class="col-lg-4 co-md-4 col-sm-12 text-center mt-2">
-                             <div class="" style="font-weight: 600">ESTIMATE</div>
-                        </div>
-                         <div class="col-lg-4 co-md-4 col-sm-12 text-center mt-2">
-                            Date: <strong>{{ $estimate->created_at->format('d-m-Y') }}</strong>
-                        </div>
-
-                    </div>
-                    <hr>
-                       <div class="row">
-                        <div class="col-lg-4 col-md-4 col-sm-12 text-center mt-0">
-                            <strong > Mobile:</strong> 9087605060
-                        </div>
-                         <div class="col-lg-4 col-md-4 col-sm-12 text-center ">
-                            <p style="font-weight: 600">Bluemooncrackers</p>
-                            <p>2/630-H, Balaji Nagar 7th Street, Near SR Palace, Sithurajapuram, Sivakasi – 626 123</p>
-                        </div>
-                         <div class="col-lg-4 col-sm-12 text-center mt-0">
-                           E-mail: <strong>orders@bluemooncrackers.com</strong>
-                        </div>
-
-                    </div>
-
-
-{{--
-                    <table class="details-table">
-                        <tr>
-                            <td><strong>Order No:</strong> {{ $estimate->oeder_id }}</td>
-                            <td><strong>E-mail:</strong> orders@bluemooncrackers.com</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Mobile:</strong> 9087605060</td>
-                        </tr>
-                    </table> --}}
-
-                    <hr>
-                    <div class="row details-table">
-                        <div class="col-lg-6 col-md-6 col-sm-12 text-center">
-                             <strong>Customer Details</strong><br>
-                                {{ $user->name }}<br>
-                                {{ $user->phone_number }}<br>
-                                {{ $user->email }}<br>
-                                {{ $user->address }}<br>
-                                 {{ $user->city }},{{ $user->state }}
-
-                        </div>
-                         <div class="col-lg-6 col-md-6 col-sm-12 text-center">
-                             <strong>Bank Details</strong><br>
-                                A/C Name: Prakash<br>
-                                A/C Number: 922020057877047<br>
-                                A/C Type: Current<br>
-                                Bank: Axis Bank<br>
-                                IFSC: UTIB0000089
-
-                        </div>
-
-                    </div>
-
-                    {{-- <table class="details-table">
-                        <tr>
-                            <td>
-                                <strong>Customer Details</strong><br>
-                                {{ $user->name }}<br>
-                                {{ $user->phone_number }}<br>
-                                {{ $user->email }}<br>
-                                {{ $user->address }}<br>
-                                {{ $user->state }}, {{ $user->city }}, {{ $user->pincode }}
-                            </td>
-                            <td class="text-end">
-                                <strong>Bank Details</strong><br>
-                                A/C Name: Prakash<br>
-                                A/C Number: 922020057877047<br>
-                                A/C Type: Current<br>
-                                Bank: Axis Bank<br>
-                                IFSC: UTIB0000089
-                            </td>
-                        </tr>
-                    </table> --}}
-                    <div style="overflow-x: auto; width: 100%;">
-                    <table class="invoice" style="width: 100%; min-width: 600px; border-collapse: collapse;">
-                        <thead>
-                            <tr>
-                                <th>S.No</th>
-
-                                <th>Product Name</th>
-                                <th>Quantity</th>
-                                <th>Rate / Qty</th>
-                                <th>Discount</th>
-                                <th>Final Rate</th>
-                                <th>Amount (Rs)</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-
-                            @php
-                                $latestOrderId = App\Models\ProductSlot::where('user_id', $user->id)
-                                    ->orderBy('order_id', 'desc')
-                                    ->value('order_id');
-
-                                // Step 2: Get related data only for that order_id
-                                $productdata = App\Models\ProductSlot::join(
-                                    'product_orders',
-                                    'product_orders.oeder_id',
-                                    '=',
-                                    'product_slots.order_id',
-                                )
-                                    ->join('products', 'products.id', '=', 'product_slots.product_id')
-                                    ->select(
-                                        'product_slots.*',
-                                        'product_orders.sub_total',
-                                        'product_orders.discount',
-                                        'product_orders.total',
-                                        'products.product_name',
-                                        'products.product_mrp_price',
-                                        'products.product_regular_price',
-                                        'product_orders.shipping'
-
-                                    )
-                                    ->where('product_slots.user_id', $user->id)
-                                    ->where('product_slots.order_id', $latestOrderId)
-                                    ->get();
-
-                                $count = App\Models\ProductSlot::where('user_id', $user->id)->where('order_id', $latestOrderId)->count();
-                                $qty = App\Models\ProductSlot::where('user_id', $user->id)->where('order_id', $latestOrderId)->sum('qty');
-
-                                $i = 1;
-
-                                $tot = 0;
-
-                            @endphp
-
-                            @foreach ($productdata as $product)
-                                @php
-                                    $rate = $product->qty * $product->product_mrp_price;
-                                    $final = $product->qty * $product->product_regular_price;
-                                    $discount = $rate - $final;
-                                    $tot += $final;
-                                @endphp
-                                <tr>
-                                    <td>{{ $i++ }}</td>
-
-                                    <td>{{ $product->product_name }}</td>
-                                    <td>{{ $product->qty }}</td>
-                                    <td>{{ $rate }}</td>
-                                    <td>{{ $discount }}</td>
-                                    <td>{{ $final }}</td>
-                                    <td>{{ $final }}</td>
-                                </tr>
-                            @endforeach
-                              <tr>
-                                <td colspan="6" class="text-end">SubToatl </td>
-                                 <td colspan="6" class="text-center"> {{  $tot }}.00</td>
-                            </tr>
-                            <tr>
-                                <td colspan="6" class="text-end">Shipping </td>
-                                 <td colspan="6" class="text-center"> {{ $product->shipping }}.00</td>
-                            </tr>
-                            <tr>
-                                <td colspan="6" class="text-end"> Total</td>
-                                 <td colspan="6" class="text-center"> {{ $product->total }}.00</td>
-                            </tr>
-
-                        </tbody>
-                    </table>
-                    </div>
-
-                    <table class="totals">
-                        <tr>
-                            <td style="text-align: left;">Total Items: {{ $count }}</td>
-                            <td>Total Quantity: {{ $qty }}</td>
-                        </tr>
-                        {{-- <tr>
-        <td style="text-align: right;">Sub Total:</td>
-        <td>6,400.00</td>
-    </tr> --}}
-                        {{-- <tr>
-                            <td style="text-align: right;">Overall Total:</td>
-                            <td></td>
-                        </tr> --}}
-                    </table>
-
-
-
+    <main class="main-content">
+        <section class="product-area product-category-area">
+            <div class="container-fluid p-0">
+                <div class="row g-0 mb-2">
+                    <img src="/assets/img/seo.jpg" style="width:100%; display:block; border-radius: 0px; filter: drop-shadow(0px 0px 6px black);">
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
+
+        <section class="thankyou-wrapper">
+            <div class="container">
+                <!-- Top Thank You Banner -->
+                <div class="thankyou-card">
+                    <div class="thankyou-icon-box">
+                        <i class="fa fa-check"></i>
+                    </div>
+                    <h1 class="thankyou-title">THANK YOU FOR YOUR ORDER!</h1>
+                    <p class="thankyou-subtitle">Your enquiry has been received successfully. Please make the bill amount payment using the QR Code or Bank Accounts listed below, then notify us at <strong>9087605060</strong>. Orders are dispatched after payment confirmation.</p>
+                    
+                    <!-- <div class="d-flex justify-content-center gap-4 flex-wrap mt-3">
+                        <img src="/assets/img/payment.png" style="max-height: 50px; width: auto;" alt="Payment">
+                        <img src="/assets/img/qrcode.webp" style="max-height: 120px; border-radius: 12px; border: 2px solid #e2e8f0;" alt="QR Code">
+                    </div> -->
+                </div>
+
+                <!-- Bank Accounts Grid -->
+                <!-- <div class="row g-4 mb-5">
+                    <div class="col-md-6">
+                        <div class="payment-info-card">
+                            <img src="/assets/img/axis.jpg" class="bank-logo-img" alt="Axis Bank">
+                            <h5 class="fw-bold text-dark mb-3">Axis Bank Details</h5>
+                            <div class="account-detail-item">
+                                <span class="text-secondary">Account Number</span>
+                                <span class="fw-bold text-dark">922020057877047</span>
+                            </div>
+                            <div class="account-detail-item">
+                                <span class="text-secondary">Account Name</span>
+                                <span class="fw-bold text-dark">PRAKASH</span>
+                            </div>
+                            <div class="account-detail-item">
+                                <span class="text-secondary">IFSC Code</span>
+                                <span class="fw-bold text-dark">UTIB0000089</span>
+                            </div>
+                            <div class="account-detail-item">
+                                <span class="text-secondary">Branch</span>
+                                <span class="fw-bold text-dark">Sivakasi Branch</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="payment-info-card">
+                            <img src="/assets/img/indianbank.png" class="bank-logo-img" alt="Indian Bank">
+                            <h5 class="fw-bold text-dark mb-3">Indian Bank Details</h5>
+                            <div class="account-detail-item">
+                                <span class="text-secondary">Account Number</span>
+                                <span class="fw-bold text-dark">50392558001</span>
+                            </div>
+                            <div class="account-detail-item">
+                                <span class="text-secondary">Account Name</span>
+                                <span class="fw-bold text-dark">KRISHNA TRADERS</span>
+                            </div>
+                            <div class="account-detail-item">
+                                <span class="text-secondary">IFSC Code</span>
+                                <span class="fw-bold text-dark">IDIBOOOS733</span>
+                            </div>
+                            <div class="account-detail-item">
+                                <span class="text-secondary">Branch</span>
+                                <span class="fw-bold text-dark">Sivakasi Branch</span>
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+
+                <!-- Invoice Section -->
+                <div class="invoice-card">
+                    @php
+                        $estimate = App\Models\ProductOrder::where('user_id', $user->id)->orderBy('oeder_id', 'desc')->first();
+                    @endphp
+
+                    @if($estimate)
+                    <div class="invoice-header">
+                        <div>
+                            <h3 class="fw-bold m-0" style="color: #2d356b;">BLUEMOON CRACKERS</h3>
+                            <small class="text-secondary">Sithurajapuram, Sivakasi – 626 123</small>
+                        </div>
+                        <div class="text-end">
+                            <span class="invoice-badge">Estimate</span>
+                            <div class="mt-2 text-secondary font-sm">Order ID: <strong>#{{ $estimate->oeder_id }}</strong></div>
+                            <div class="text-secondary font-sm">Date: <strong>{{ $estimate->created_at->format('d-m-Y') }}</strong></div>
+                        </div>
+                    </div>
+
+                    <div class="row g-3 mb-4 p-3 rounded-3" style="background: #f8fafc; border: 1px solid #e2e8f0;">
+                        <div class="col-md-6">
+                            <strong class="text-dark d-block mb-1">Customer Details:</strong>
+                            <div class="text-secondary font-sm">Name: <strong>{{ $user->name }}</strong></div>
+                            <div class="text-secondary font-sm">Phone: <strong>{{ $user->phone_number }}</strong></div>
+                            <div class="text-secondary font-sm">Address: <strong>{{ $user->address }}, {{ $user->city }}, {{ $user->state }}</strong></div>
+                        </div>
+                        <div class="col-md-6 text-md-end">
+                            <strong class="text-dark d-block mb-1">Support Contact:</strong>
+                            <div class="text-secondary font-sm">Phone: <strong>(+91) 9087605060</strong></div>
+                            <div class="text-secondary font-sm">Email: <strong>orders@bluemooncrackers.com</strong></div>
+                        </div>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="invoice-table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th class="text-start">Product Name</th>
+                                    <th>Qty</th>
+                                    <th>MRP Rate</th>
+                                    <th>Discount</th>
+                                    <th>Final Rate</th>
+                                    <th class="text-end">Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @php
+                                    $latestOrderId = App\Models\ProductSlot::where('user_id', $user->id)
+                                        ->orderBy('order_id', 'desc')
+                                        ->value('order_id');
+
+                                    $productdata = App\Models\ProductSlot::join(
+                                        'product_orders',
+                                        'product_orders.oeder_id',
+                                        '=',
+                                        'product_slots.order_id'
+                                    )
+                                        ->join('products', 'products.id', '=', 'product_slots.product_id')
+                                        ->select(
+                                            'product_slots.*',
+                                            'product_orders.sub_total',
+                                            'product_orders.discount',
+                                            'product_orders.total',
+                                            'products.product_name',
+                                            'products.product_mrp_price',
+                                            'products.product_regular_price',
+                                            'product_orders.shipping'
+                                        )
+                                        ->where('product_slots.user_id', $user->id)
+                                        ->where('product_slots.order_id', $latestOrderId)
+                                        ->get();
+
+                                    $count = App\Models\ProductSlot::where('user_id', $user->id)->where('order_id', $latestOrderId)->count();
+                                    $qty = App\Models\ProductSlot::where('user_id', $user->id)->where('order_id', $latestOrderId)->sum('qty');
+                                    $i = 1;
+                                    $tot = 0;
+                                @endphp
+
+                                @foreach ($productdata as $product)
+                                    @php
+                                        $rate = $product->qty * $product->product_mrp_price;
+                                        $final = $product->qty * $product->product_regular_price;
+                                        $discount = $rate - $final;
+                                        $tot += $final;
+                                    @endphp
+                                    <tr>
+                                        <td>{{ $i++ }}</td>
+                                        <td class="text-start fw-semibold text-dark">{{ $product->product_name }}</td>
+                                        <td>{{ $product->qty }}</td>
+                                        <td>₹{{ $rate }}</td>
+                                        <td class="text-success">₹{{ $discount }}</td>
+                                        <td>₹{{ $final }}</td>
+                                        <td class="text-end fw-bold">₹{{ $final }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                            <tfoot>
+                                @if(isset($product))
+                                <tr>
+                                    <td colspan="6" class="text-end text-secondary">Subtotal:</td>
+                                    <td class="text-end font-bold">₹{{ $tot }}.00</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="6" class="text-end text-secondary">Shipping:</td>
+                                    <td class="text-end font-bold text-success">₹{{ $product->shipping }}.00</td>
+                                </tr>
+                                <tr style="background:#fff8f5;">
+                                    <td colspan="6" class="text-end fs-5 fw-bold" style="color:#2d356b;">Overall Total:</td>
+                                    <td class="text-end fs-5 fw-bold" style="color:#e25d26;">₹{{ $product->total }}.00</td>
+                                </tr>
+                                @endif
+                            </tfoot>
+                        </table>
+                    </div>
+
+                    <div class="d-flex justify-content-between mt-3 font-sm text-secondary">
+                        <span>Total Unique Items: <strong>{{ $count }}</strong></span>
+                        <span>Total Quantity: <strong>{{ $qty }}</strong></span>
+                    </div>
+                    @endif
+                </div>
+            </div>
+        </section>
+    </main>
 
 @endsection

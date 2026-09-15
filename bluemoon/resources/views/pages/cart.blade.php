@@ -1,239 +1,168 @@
-<section class="shopping-cart-area">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="shopping-cart-form table-responsive">
-                    <form action="#" method="post">
-                        <table class="table text-center">
-                            <thead>
-                                <tr>
-                                    <th class="product-remove">&nbsp;</th>
-                                    <th class="product-thumb">&nbsp;</th>
-                                    <th class="product-name">Product</th>
-                                    <th class="product-price">Price</th>
-                                    <th class="product-quantity">Quantity</th>
-                                    <th class="product-subtotal">Total</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr class="cart-product-item">
-                                    <td class="product-remove">
-                                        <a href="#/"><i class="fa fa-trash-o"></i></a>
-                                    </td>
-                                    <td class="product-thumb">
-                                        <a href="single-product.html">
-                                            <img src="assets/img/shop/product-mini/1.webp" width="90" height="110"
-                                                alt="Image-HasTech">
-                                        </a>
-                                    </td>
-                                    <td class="product-name">
-                                        <h4 class="title"><a href="single-product.html">Leather Mens Slipper</a></h4>
-                                    </td>
-                                    <td class="product-price">
-                                        <span class="price">£69.99</span>
-                                    </td>
-                                    <td class="product-quantity">
-                                        <div class="pro-qty">
-                                            <input type="text" class="quantity" title="Quantity" value="1">
-                                        </div>
-                                    </td>
-                                    <td class="product-subtotal">
-                                        <span class="price">£69.99</span>
-                                    </td>
-                                </tr>
-                                <tr class="cart-product-item">
-                                    <td class="product-remove">
-                                        <a href="#/"><i class="fa fa-trash-o"></i></a>
-                                    </td>
-                                    <td class="product-thumb">
-                                        <a href="single-product.html">
-                                            <img src="assets/img/shop/product-mini/2.webp" width="90" height="110"
-                                                alt="Image-HasTech">
-                                        </a>
-                                    </td>
-                                    <td class="product-name">
-                                        <h4 class="title"><a href="single-product.html">Quickiin Mens shoes</a></h4>
-                                    </td>
-                                    <td class="product-price">
-                                        <span class="price">£20.00</span>
-                                    </td>
-                                    <td class="product-quantity">
-                                        <div class="pro-qty">
-                                            <input type="text" class="quantity" title="Quantity" value="1">
-                                        </div>
-                                    </td>
-                                    <td class="product-subtotal">
-                                        <span class="price">£20.00</span>
-                                    </td>
-                                </tr>
-                                <tr class="cart-product-item">
-                                    <td class="product-remove">
-                                        <a href="#/"><i class="fa fa-trash-o"></i></a>
-                                    </td>
-                                    <td class="product-thumb">
-                                        <a href="single-product.html">
-                                            <img src="assets/img/shop/product-mini/3.webp" width="90" height="110"
-                                                alt="Image-HasTech">
-                                        </a>
-                                    </td>
-                                    <td class="product-name">
-                                        <h4 class="title"><a href="single-product.html">Rexpo Womens shoes</a></h4>
-                                    </td>
-                                    <td class="product-price">
-                                        <span class="price">£39.00</span>
-                                    </td>
-                                    <td class="product-quantity">
-                                        <div class="pro-qty">
-                                            <input type="text" class="quantity" title="Quantity" value="1">
-                                        </div>
-                                    </td>
-                                    <td class="product-subtotal">
-                                        <span class="price">£39.00</span>
-                                    </td>
-                                </tr>
-                                <tr class="actions">
-                                    <td class="border-0" colspan="6">
-                                        <button type="submit" class="update-cart" disabled>Update cart</button>
-                                        <button type="submit" class="clear-cart">Clear Cart</button>
-                                        <a href="shop.html" class="btn-theme btn-flat">Continue Shopping</a>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </form>
-                </div>
+@extends('layouts.app')
+@section('title', 'Shopping Cart - Bluemoon Crackers')
+@section('main-content')
+
+<style>
+    .cart-page-area {
+        padding: 50px 0 70px;
+        background: #fdfdfd;
+    }
+    .cart-table-wrap {
+        background: #ffffff;
+        border-radius: 16px;
+        overflow: hidden;
+        border: 1px solid #e2e8f0;
+        box-shadow: 0 4px 20px rgba(45, 53, 107, 0.06);
+        margin-bottom: 40px;
+    }
+    .cart-table-wrap table thead th {
+        background: #2d356b !important;
+        color: #ffffff !important;
+        font-weight: 700;
+        font-size: 15px;
+        padding: 16px;
+        border: none;
+    }
+    .cart-table-wrap table tbody td {
+        vertical-align: middle;
+        padding: 16px;
+        border-bottom: 1px solid #e2e8f0;
+    }
+    .cart-product-title {
+        color: #2d356b;
+        font-weight: 700;
+        font-size: 16px;
+        text-decoration: none;
+    }
+    .cart-product-price {
+        color: #e25d26;
+        font-weight: 700;
+        font-size: 16px;
+    }
+    .remove-btn {
+        color: #ef4444;
+        font-size: 18px;
+        transition: transform 0.2s ease;
+    }
+    .remove-btn:hover {
+        transform: scale(1.2);
+        color: #dc2626;
+    }
+    .cart-card-box {
+        background: #ffffff;
+        border-radius: 16px;
+        padding: 28px;
+        border: 1px solid #e2e8f0;
+        box-shadow: 0 4px 20px rgba(45, 53, 107, 0.06);
+        height: 100%;
+    }
+    .cart-card-title {
+        color: #2d356b;
+        font-weight: 800;
+        font-size: 20px;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #e25d26;
+    }
+    .btn-checkout-theme {
+        background: linear-gradient(135deg, #e25d26 0%, #ff7838 100%) !important;
+        color: #ffffff !important;
+        font-weight: 700;
+        padding: 12px 28px;
+        border-radius: 10px;
+        text-decoration: none;
+        display: inline-block;
+        box-shadow: 0 4px 14px rgba(226, 93, 38, 0.3);
+        transition: all 0.3s ease;
+    }
+    .btn-checkout-theme:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 18px rgba(226, 93, 38, 0.45);
+    }
+</style>
+
+<main class="main-content">
+    <section class="product-area product-category-area">
+        <div class="container-fluid p-0">
+            <div class="row g-0 mb-2">
+                <img src="/assets/img/seo.jpg" style="width:100%; display:block; border-radius: 0px; filter: drop-shadow(0px 0px 6px black);">
             </div>
         </div>
-        <div class="row row-gutter-50">
-            <div class="col-md-6 col-lg-4">
-                <div id="CategoriesAccordion" class="shipping-form-calculate">
-                    <div class="section-title-cart">
-                        <h5 class="title">Calculate Shipping</h5>
-                        <div class="desc">
-                            <p>Estimate your shipping fee *</p>
-                        </div>
-                    </div>
-                    <span data-bs-toggle="collapse" data-bs-target="#CategoriesTwo" aria-expanded="true"
-                        role="button">Calculate shipping</span>
-                    <div id="CategoriesTwo" class="collapse show" data-bs-parent="#CategoriesAccordion">
+    </section>
+
+    <section class="cart-page-area">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="cart-table-wrap table-responsive">
                         <form action="#" method="post">
-                            <div class="row row-gutter-50">
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label class="visually-hidden" for="FormCountry">State</label>
-                                        <select id="FormCountry" class="form-control">
-                                            <option selected>Select a country…</option>
-                                            <option>...</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label for="stateCounty" class="visually-hidden">State / County</label>
-                                        <input type="text" id="stateCounty" class="form-control"
-                                            placeholder="State / County">
-                                    </div>
-                                </div>
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label for="townCity" class="visually-hidden">Town / City</label>
-                                        <input type="text" id="townCity" class="form-control" placeholder="Town / City">
-                                    </div>
-                                </div>
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label for="postcodeZip" class="visually-hidden">Postcode / ZIP</label>
-                                        <input type="text" id="postcodeZip" class="form-control"
-                                            placeholder="Postcode / ZIP">
-                                    </div>
-                                </div>
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <button type="submit" class="update-totals">Update totals</button>
-                                    </div>
-                                </div>
-                            </div>
+                            <table class="table text-center align-middle m-0">
+                                <thead>
+                                    <tr>
+                                        <th class="product-remove">&nbsp;</th>
+                                        <th class="product-thumb">Image</th>
+                                        <th class="product-name">Product</th>
+                                        <th class="product-price">Price</th>
+                                        <th class="product-quantity">Quantity</th>
+                                        <th class="product-subtotal">Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="cart-product-item">
+                                        <td class="product-remove">
+                                            <a href="#/" class="remove-btn"><i class="fa fa-trash-o"></i></a>
+                                        </td>
+                                        <td class="product-thumb">
+                                            <a href="/quickcheckout">
+                                                <img src="/assets/img/prod_ban.webp" width="70" height="70" style="border-radius:8px; object-fit:cover;" alt="Product">
+                                            </a>
+                                        </td>
+                                        <td class="product-name">
+                                            <a href="/quickcheckout" class="cart-product-title">Standard Crackers Pack</a>
+                                        </td>
+                                        <td class="product-price">
+                                            <span class="cart-product-price">₹1,499</span>
+                                        </td>
+                                        <td class="product-quantity">
+                                            <div class="pro-qty d-inline-block">
+                                                <input type="text" class="form-control text-center" style="width: 70px;" value="1">
+                                            </div>
+                                        </td>
+                                        <td class="product-subtotal">
+                                            <span class="cart-product-price">₹1,499</span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </form>
                     </div>
                 </div>
             </div>
-            <div class="col-md-6 col-lg-4">
-                <div class="shipping-form-coupon">
-                    <div class="section-title-cart">
-                        <h5 class="title">Coupon Code</h5>
-                        <div class="desc">
-                            <p>Enter your coupon code if you have one.</p>
+
+            <div class="row g-4 justify-content-end">
+                <div class="col-md-6 col-lg-5">
+                    <div class="cart-card-box">
+                        <h5 class="cart-card-title">Cart Totals</h5>
+                        <div class="d-flex justify-content-between py-2 border-bottom">
+                            <span class="fw-bold text-secondary">Subtotal</span>
+                            <span class="fw-bold text-dark">₹1,499.00</span>
+                        </div>
+                        <div class="d-flex justify-content-between py-2 border-bottom">
+                            <span class="fw-bold text-secondary">Shipping</span>
+                            <span class="text-success fw-semibold">Calculated at Checkout</span>
+                        </div>
+                        <div class="d-flex justify-content-between py-3 mb-3">
+                            <span class="fw-bold fs-5" style="color:#2d356b">Overall Total</span>
+                            <span class="fw-bold fs-5" style="color:#e25d26">₹1,499.00</span>
+                        </div>
+                        <div class="text-end">
+                            <a class="btn-checkout-theme w-100 text-center" href="/checkout"><i class="fa fa-credit-card me-2"></i>Proceed to Checkout</a>
                         </div>
                     </div>
-                    <form action="#" method="post">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label for="couponCode" class="visually-hidden">Coupon Code</label>
-                                    <input type="text" id="couponCode" class="form-control"
-                                        placeholder="Enter your coupon code..">
-                                </div>
-                            </div>
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <button type="submit" class="coupon-btn">Apply coupon</button>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-            <div class="col-md-12 col-lg-4">
-                <div class="shipping-form-cart-totals">
-                    <div class="section-title-cart">
-                        <h5 class="title">Cart totals</h5>
-                    </div>
-                    <div class="cart-total-table">
-                        <table class="table">
-                            <tbody>
-                                <tr class="cart-subtotal">
-                                    <td>
-                                        <p class="value">Subtotal</p>
-                                    </td>
-                                    <td>
-                                        <p class="price">£128.00</p>
-                                    </td>
-                                </tr>
-                                <tr class="shipping">
-                                    <td>
-                                        <p class="value">Shipping</p>
-                                    </td>
-                                    <td>
-                                        <ul class="shipping-list">
-                                            <li class="radio">
-                                                <input type="radio" name="shipping" id="radio1" checked>
-                                                <label for="radio1"><span></span> Flat Rate</label>
-                                            </li>
-                                            <li class="radio">
-                                                <input type="radio" name="shipping" id="radio2">
-                                                <label for="radio2"><span></span> Free Shipping</label>
-                                            </li>
-                                            <li class="radio">
-                                                <input type="radio" name="shipping" id="radio3">
-                                                <label for="radio3"><span></span> Local Pickup</label>
-                                            </li>
-                                        </ul>
-                                    </td>
-                                </tr>
-                                <tr class="order-total">
-                                    <td>
-                                        <p class="value">Total</p>
-                                    </td>
-                                    <td>
-                                        <p class="price">£128.00</p>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <a class="btn-theme btn-flat" href="shop-checkout.html">Proceed to checkout</a>
                 </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
+</main>
+
+@endsection

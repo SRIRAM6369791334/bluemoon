@@ -9,9 +9,9 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="title" content=@yield('meta-title')>
-  <meta name="description" content=@yield('meta-description') />
-   <meta name="keywords" content=@yield('meta-keywords') />
+  <meta name="title" content="@yield('meta-title')">
+  <meta name="description" content="@yield('meta-description')">
+  <meta name="keywords" content="@yield('meta-keywords')">
   <meta name="author" content="codecarnival" />
   <meta name="csrf-token" content="{{ csrf_token() }}">
 
@@ -158,6 +158,27 @@
 .stickhead.show-contact {
   transform: translateY(-72%);
 }
+
+@media (max-width: 767px) {
+  .float {
+    width: 44px;
+    height: 44px;
+    bottom: 20px;
+    left: 14px;
+    font-size: 22px;
+  }
+  .facebook, .insta {
+    display: none !important;
+  }
+  .floating-icon {
+    bottom: 18px !important;
+    right: 8px !important;
+  }
+  .floating-icon img {
+    width: 65px !important;
+    height: 65px !important;
+  }
+}
 </style>
 
 <body>
@@ -203,7 +224,10 @@
 
         <script>
             document.addEventListener('DOMContentLoaded', function () {
-                document.getElementById('checkoutModal').style.display = 'block';
+                var modal = document.getElementById('checkoutModal');
+                if (modal) {
+                    modal.style.display = 'block';
+                }
             });
         </script>
     @endif
@@ -382,19 +406,19 @@
         <!-- Mobile Menu Start -->
         <div class="mobile-menu-items">
           <ul class="nav-menu">
-            <li><a href="/">Home</a>
-
-            </li>
+            <li><a href="/">Home</a></li>
             <li><a href="/about">About</a></li>
-            <li><a href="/quickcheckout">Products</a>
-
-            </li>
-
-
+            <li><a href="/quickcheckout">Products</a></li>
+            <li><a href="#">Diwali Fund</a></li>
             <li><a href="/contact">Contact</a></li>
           </ul>
         </div>
         <!-- Mobile Menu End -->
+        <div class="mobile-menu-social mt-4 pt-3 border-top d-flex gap-3 justify-content-center">
+          <a href="https://wa.me/+919087605060" target="_blank" class="text-success fs-4"><i class="fab fa-whatsapp"></i></a>
+          <a href="#" target="_blank" class="text-primary fs-4"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" target="_blank" class="text-danger fs-4"><i class="fab fa-instagram"></i></a>
+        </div>
       </div>
     </div>
     <!--== End Side Menu ==-->
@@ -436,28 +460,16 @@ window.addEventListener('scroll', function () {
   const header = document.querySelector('.header-middle');
   const headerContact = document.querySelector('.stickhead');
 
-  if (window.scrollY > 100) {
-    header.classList.add('sticky');
-    headerContact.classList.add('show-contact');
-  } else {
-    header.classList.remove('sticky');
-    headerContact.classList.remove('show-contact');
+  if (header && headerContact) {
+    if (window.scrollY > 100) {
+      header.classList.add('sticky');
+      headerContact.classList.add('show-contact');
+    } else {
+      header.classList.remove('sticky');
+      headerContact.classList.remove('show-contact');
+    }
   }
 });
-
-  // Active Nav Link on Scroll
-
-//   window.addEventListener("scroll", () => {
-//     let current = "";
-//     sections.forEach((section) => {
-//       const sectionTop = section.offsetTop;
-//       if (pageYOffset >= sectionTop - 150) {
-//         current = section.getAttribute("id");
-//       }
-//     });
-
-
-//   });
 </script>
 
 
@@ -475,7 +487,9 @@ window.addEventListener('scroll', function () {
           $row.find('.totalprice').text('₹' + total.toFixed(2));
         }
       });
-      calculateTotals();
+      if (typeof calculateTotals === 'function') {
+        calculateTotals();
+      }
 
       var proQty = $(".pro-qty");
       proQty.append('<div class="dec qty-btn">-</div>');

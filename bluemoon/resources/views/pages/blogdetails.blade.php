@@ -1,122 +1,173 @@
 @extends('layouts.app')
-@section('title', 'Bluemoon Cracker Blog')
-@section('meta-title', $blogdetails->meta_title )
-@section('meta-description',  $blogdetails->meta_des)
-@section('meta-keywords',   $blogdetails->meta_key )
+@section('title', !empty($blogdetails->meta_title) ? $blogdetails->meta_title : ($blogdetails->title . ' - Bluemoon Crackers'))
+@section('meta-title', !empty($blogdetails->meta_title) ? $blogdetails->meta_title : $blogdetails->title)
+@section('meta-description', $blogdetails->meta_des ?? '')
+@section('meta-keywords', $blogdetails->meta_key ?? '')
 @section('main-content')
+
+<style>
+    .blog-details-area {
+        padding: 50px 0 70px;
+        background: #fdfdfd;
+    }
+    .blog-main-wrap {
+        background: #ffffff;
+        border-radius: 16px;
+        padding: 30px;
+        border: 1px solid #e2e8f0;
+        box-shadow: 0 4px 20px rgba(45, 53, 107, 0.05);
+    }
+    .blog-main-thumb {
+        border-radius: 12px;
+        overflow: hidden;
+        margin-bottom: 24px;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+    }
+    .blog-main-thumb img {
+        width: 100%;
+        height: auto;
+        max-height: 480px;
+        object-fit: cover;
+        display: block;
+    }
+    .blog-main-meta {
+        color: #e25d26;
+        font-weight: 600;
+        font-size: 14px;
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .blog-main-title {
+        color: #2d356b;
+        font-weight: 800;
+        font-size: 30px;
+        line-height: 1.3;
+        margin-bottom: 20px;
+    }
+    .blog-details-content p {
+        color: #444;
+        line-height: 1.8;
+        font-size: 16px;
+        text-align: justify;
+        margin-bottom: 16px;
+    }
+
+    /* Sidebar Styling */
+    .blog-sidebar-wrap {
+        background: #ffffff;
+        border-radius: 16px;
+        padding: 24px;
+        border: 1px solid #e2e8f0;
+        box-shadow: 0 4px 20px rgba(45, 53, 107, 0.05);
+    }
+    .sidebar-title {
+        color: #2d356b;
+        font-weight: 800;
+        font-size: 20px;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #e25d26;
+    }
+    .single-post-item {
+        display: flex;
+        gap: 14px;
+        align-items: center;
+        margin-bottom: 16px;
+        padding-bottom: 16px;
+        border-bottom: 1px dashed #e2e8f0;
+    }
+    .single-post-item:last-child {
+        margin-bottom: 0;
+        padding-bottom: 0;
+        border-bottom: none;
+    }
+    .single-post-thumb {
+        width: 85px;
+        height: 85px;
+        flex-shrink: 0;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+    .single-post-thumb img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    .single-post-info .date {
+        font-size: 12px;
+        color: #e25d26;
+        font-weight: 600;
+        margin-bottom: 4px;
+        display: block;
+    }
+    .single-post-info .title {
+        font-size: 14px;
+        font-weight: 700;
+        line-height: 1.4;
+        margin: 0;
+    }
+    .single-post-info .title a {
+        color: #2d356b;
+        text-decoration: none;
+        transition: color 0.2s ease;
+    }
+    .single-post-info .title a:hover {
+        color: #e25d26;
+    }
+</style>
 
     <main class="main-content">
     <!--== Start Page Header Area Wrapper ==-->
-<section class="product-area product-category-area">
-            <div class="container-fluid">
-                <div class="row  mb-2">
-                    <img src="/assets/img/seo.jpg" style="border-radius: 0px; filter: drop-shadow(0px 0px 6px black);">
-                </div>
+    <section class="product-area product-category-area">
+        <div class="container-fluid p-0">
+            <div class="row g-0 mb-2">
+                <img src="/assets/img/seo.jpg" style="width:100%; display:block; border-radius: 0px; filter: drop-shadow(0px 0px 6px black);">
             </div>
-        </section>
+        </div>
+    </section>
     <!--== End Page Header Area Wrapper ==-->
 
     <!--== Start Blog Area Wrapper ==-->
-    <section class="blog-details-area pt-5">
+    <section class="blog-details-area">
       <div class="container">
-        <div class="row justify-content-between">
-          <div class="col-xl-8 pt-5" data-aos="fade-right">
-            <div class="blog-details-content-wrap">
-              <div class="blog-details-item">
-                <div class="blog-details-thumb">
-                  <img src="{{ env('MAIN_URL') . $blogdetails->image }}" width="750" height="459" alt="Image-HasTech" style="width:750px;height: 450px">
+        <div class="row g-4">
+          <div class="col-lg-8" data-aos="fade-right">
+            <div class="blog-main-wrap">
+                <div class="blog-main-thumb">
+                  <img src="{{ env('MAIN_URL') . $blogdetails->image }}" alt="{{ $blogdetails->title }}">
                 </div>
-                <div class="blog-meta-post">
-                  <ul>
-                    <li class="post-date"><i class="fa fa-calendar"></i><a>{{ $blogdetails->created_at->format('d M y') }}</a></li>
-                    {{-- <li class="author-info"><i class="fa fa-user"></i><a href="blog.html">Hector Lovett</a></li> --}}
-                  </ul>
+                <div class="blog-main-meta">
+                  <i class="fa fa-calendar"></i> {{ $blogdetails->created_at->format('d M Y') }}
                 </div>
-                <h3 class="main-title">{{ $blogdetails->title }}</h3>
-                <div class="details-wrapper details-wrapper-style1" data-margin-bottom="38">
-                  <p></p>
-
-                  <p>{!! $blogdetails->feet_content !!}</p>
+                <h1 class="blog-main-title">{{ $blogdetails->title }}</h1>
+                <div class="blog-details-content">
+                  {!! $blogdetails->feet_content !!}
                 </div>
-
-
-
-              </div>
-
-              <!--== Start Comment View Item ==-->
-
-              <!--== End Comment View Item ==-->
-
-              <!--== Start Comment Item ==-->
-              {{-- <div class="comment-form-area">
-                <h4 class="title-main">Leave a Comments</h4>
-                <div class="comment-form-content">
-                  <form action="#">
-                    <div class="row ">
-                      <div class="col-md-6">
-                        <div class="form-group">
-                          <input class="form-control" type="text" placeholder="Name *">
-                        </div>
-                      </div>
-                      <div class="col-md-6">
-                        <div class="form-group">
-                          <input class="form-control" type="email" placeholder="Email *">
-                        </div>
-                      </div>
-                      <div class="col-md-12">
-                        <div class="form-group">
-                          <input class="form-control" type="text" placeholder="Subject (Optinal)">
-                        </div>
-                      </div>
-                      <div class="col-md-12">
-                        <div class="form-group mb--0">
-                          <textarea class="form-control" placeholder="Message"></textarea>
-                        </div>
-                      </div>
-                      <div class="col-md-12">
-                        <div class="form-group mb--0">
-                          <button type="submit" class="btn-theme">Send a Comment</button>
-                        </div>
-                      </div>
-                    </div>
-                  </form>
-                </div>
-              </div> --}}
-              <!--== End Comment Item ==-->
             </div>
           </div>
-          <div class="col-xl-4" data-aos="fade-left">
-            <div class="blog-sidebar">
-
-
-              <div class="blog-sidebar-wrap">
-
-
-                <div class="blog-sidebar-post">
-                  <h4 class="sidebar-title">Recent Post</h4>
-                  <div class="sidebar-post">
+          <div class="col-lg-4" data-aos="fade-left">
+            <div class="blog-sidebar-wrap">
+                  <h4 class="sidebar-title">Recent Posts</h4>
+                  <div class="sidebar-posts-list">
                      @php
-                 $blog = App\models\Blog::orderBy('created_at', 'desc')->get()
-            @endphp
+                         $blog = App\models\Blog::orderBy('created_at', 'desc')->get();
+                     @endphp
                     @foreach ($blog as $blogItems)
-                         <div class="single-post">
-                      <div class="post-thumb">
-                        <a href="/{{Str::slug($blogItems->url) }}"><img src="{{ env('MAIN_URL') . $blogItems->image }}" width="98" height="101" alt="" style="width:98px;height:101px"></a>
-                      </div>
-                      <div class="post-content">
-                        <span class="date"><a href="/{{Str::slug($blogItems->url) }}"><i class="fa fa-calendar"></i>{{ $blogItems->created_at->format('d Y m') }}</a></span>
-                        <h6 class="title"><a href="/{{Str::slug($blogItems->url) }}">{{ $blogItems->title }}</a></h6>
-                      </div>
-                    </div>
+                     <div class="single-post-item">
+                        <div class="single-post-thumb">
+                          <a href="/{{Str::slug($blogItems->url) }}">
+                              <img src="{{ env('MAIN_URL') . $blogItems->image }}" alt="{{ $blogItems->title }}">
+                          </a>
+                        </div>
+                        <div class="single-post-info">
+                          <span class="date"><i class="fa fa-calendar me-1"></i>{{ $blogItems->created_at->format('d M Y') }}</span>
+                          <h6 class="title"><a href="/{{Str::slug($blogItems->url) }}">{{ $blogItems->title }}</a></h6>
+                        </div>
+                     </div>
                     @endforeach
-
-
                   </div>
-                </div>
-
-
-
-              </div>
             </div>
           </div>
         </div>
@@ -124,9 +175,5 @@
     </section>
     <!--== End Blog Area Wrapper ==-->
   </main>
-
-
-
-
 
 @endsection

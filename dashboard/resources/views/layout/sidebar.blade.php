@@ -60,12 +60,12 @@
                             <span data-key="t-dashboard" style="color:#eebe6c">Products</span>
                         </a>
                     </li>
-                    <!-- <li>-->
-                    <!--    <a href="{{ url('/homesection/view') }}">-->
-                    <!--       <i class="fas fa-box " style="color:#eebe6c"></i>-->
-                    <!--        <span data-key="t-dashboard" style="color:#eebe6c">Home Sections</span>-->
-                    <!--    </a>-->
-                    <!--</li>-->
+                    <li>
+                        <a href="{{ url('/homesection/view') }}">
+                           <i class="fas fa-layer-group " style="color:#eebe6c"></i>
+                            <span data-key="t-dashboard" style="color:#eebe6c">Home Sections</span>
+                        </a>
+                    </li>
                     <li>
                         <a href="{{ url('/customer') }}">
                             <i class="far fa-handshake " aria-hidden="true" style="color:#eebe6c"> </i>
